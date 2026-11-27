@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>प्राइम टैक्स एडवाइजर | Prime Tax Advisor — टैक्स, GST, ऑडिट और नोटिस</title>
+  <meta name="description" content="Prime Tax Advisor — GST, Income Tax, Audit, CIBIL, Accounting, Notice & Litigation, and E-Commerce Operator Compliance with bilingual Hindi/English support." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated Intro Preloader -->
+  <div id="pl" aria-hidden="true">
+    <div class="pl-inner">
+      <svg class="pl-ring" width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="27" stroke="#e6e3da" stroke-width="3"/>
+        <circle class="pl-arc" cx="32" cy="32" r="27" stroke="url(#plGrad)" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 25h18M23 32h13M23 39h9" stroke="#0f4c81" stroke-width="2.4" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="plGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0f4c81"/>
+            <stop offset="1" stop-color="#c9973a"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="pl-brand">Prime Tax <span>Advisor</span></div>
+    </div>
+  </div>
+
+  <!-- Top Scroll Progress Bar -->
+  <div id="sp" aria-hidden="true"></div>
+
+  <!-- Sticky Frosted-Glass Navbar (rendered dynamically for live HI/EN translation) -->
+  <header class="site-nav-wrap" id="site-nav-wrap"></header>
+
+  <!-- Main Single-Page Experience -->
+  <main id="app-root"></main>
+
+  <!-- Floating WhatsApp Action Button -->
+  <a href="https://wa.me/918307918448" target="_blank" rel="noopener" class="wa-fab" aria-label="WhatsApp" title="WhatsApp: 83079-18448">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  </a>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">Notification</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
