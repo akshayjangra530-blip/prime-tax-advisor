@@ -775,6 +775,18 @@ function renderContactSection() {
                 <a href="https://maps.google.com/?q=Sirsa+Haryana+125055" target="_blank" rel="noopener" class="btn ghost sm">${escapeHtml(txt("mapBtn"))}</a>
               </div>
             </div>
+
+            <div class="docs-panel" style="margin-top:1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <img src="prime-tax-qr.png" alt="Prime Tax Advisor Website QR" style="width:92px; height:92px; border-radius:12px; border:1px solid var(--line); background:#fff; padding:4px; flex-shrink:0;" />
+              <div style="flex:1; min-width:180px;">
+                <strong style="font-size:0.92rem; display:block;">${escapeHtml(txt("qrTitle"))}</strong>
+                <div class="hint" style="margin:0.15rem 0 0.6rem;">${escapeHtml(txt("qrSub"))}</div>
+                <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                  <a href="prime-tax-qr-card.png" download="Prime-Tax-Advisor-QR.png" class="btn sm">${escapeHtml(txt("qrDownloadBtn"))}</a>
+                  <button type="button" class="btn ghost sm" id="open-qr-modal-btn">${escapeHtml(txt("qrViewBtn"))}</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1141,6 +1153,21 @@ document.addEventListener("click", (e) => {
     const [key, idx] = remBtn.getAttribute("data-remove-file").split(":");
     state.intake[key]?.splice(Number(idx), 1);
     renderAll();
+    return;
+  }
+
+  if (e.target.closest("#open-qr-modal-btn")) {
+    openModal(
+      txt("qrTitle"),
+      `
+        <div style="text-align:center;">
+          <img src="prime-tax-qr-card.png" alt="Prime Tax Advisor QR Card" style="max-width:340px; width:100%; border-radius:16px; border:1px solid var(--line);" />
+          <div style="margin-top:1rem; display:flex; justify-content:center; gap:0.65rem; flex-wrap:wrap;">
+            <a href="prime-tax-qr-card.png" download="Prime-Tax-Advisor-QR.png" class="btn sm">${escapeHtml(txt("qrDownloadBtn"))}</a>
+          </div>
+        </div>
+      `
+    );
   }
 });
 
