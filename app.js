@@ -148,16 +148,7 @@ function renderNavbar() {
   host.innerHTML = `
     <nav class="wrap nav-bar" aria-label="Main navigation">
       <a href="#top" class="logo">
-        <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <rect width="28" height="28" rx="8" fill="url(#ptaLogoGrad)"/>
-          <path d="M8 9.5h12M8 14h8.5M8 18.5h6M19 15l-2.8 4 3.2 0-2 3.2" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-          <defs>
-            <linearGradient id="ptaLogoGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0f4c81"/>
-              <stop offset="1" stop-color="#c9973a"/>
-            </linearGradient>
-          </defs>
-        </svg>
+        <img src="logo-icon.png" alt="Prime Tax Advisor Logo" class="brand-logo-img" />
         <span>${escapeHtml(txt("brandLeft"))}</span>
         <span class="logo-accent">${escapeHtml(txt("brandRight"))}</span>
       </a>
@@ -204,6 +195,11 @@ function renderHeroSection() {
       <div class="orb orb1" aria-hidden="true"></div>
       <div class="orb orb2" aria-hidden="true"></div>
       <div class="wrap hero-inner">
+        <div class="hero-crest-wrap">
+          <div class="hero-crest">
+            <img src="logo.jpg" alt="Prime Tax Advisor Accountants" />
+          </div>
+        </div>
         <div class="hero-pill">${escapeHtml(txt("heroPill"))}</div>
         <h1>
           ${wrapWordsHtml(preText, 0)}<br />
@@ -839,7 +835,20 @@ function renderContactSection() {
               <div class="c-ico">📞</div>
               <div>
                 <strong>${escapeHtml(txt("contactPhoneLabel"))}</strong>
-                <div><a href="tel:+918307918448" style="color:var(--a); font-weight:700;">+91 83079-18448</a></div>
+                <div>
+                  <a href="tel:+918307918448" style="color:var(--a); font-weight:700;">+91 83079-18448</a>
+                  <span class="hint" style="font-weight:600;"> (Available for online payment)</span>
+                </div>
+              </div>
+            </div>
+            <div class="c-row">
+              <div class="c-ico">👥</div>
+              <div>
+                <strong>${escapeHtml(txt("contactAnotherLabel"))}</strong>
+                <div style="display:grid; gap:0.2rem; margin-top:0.15rem; font-size:0.88rem;">
+                  <div><span style="font-weight:600;">Rahul Office:</span> <a href="tel:+919817419964" style="color:var(--a); font-weight:700;">+91 98174 19964</a></div>
+                  <div><span style="font-weight:600;">Yogesh Moyal:</span> <a href="tel:+917015249529" style="color:var(--a); font-weight:700;">+91 70152 49529</a></div>
+                </div>
               </div>
             </div>
             <div class="c-row">
@@ -899,8 +908,11 @@ function renderContactSection() {
 
     <footer class="site-footer">
       <div class="wrap footer-inner">
-        <span>${escapeHtml(txt("footerCopy"))}</span>
-        <span>${escapeHtml(txt("contactAddrVal"))} · <a href="tel:+918307918448">+91 83079-18448</a> · <a href="mailto:prime.tax.advisor01@gmail.com">prime.tax.advisor01@gmail.com</a></span>
+        <span class="footer-brand-badge">
+          <img src="logo-icon.png" alt="Prime Tax Advisor" class="footer-logo-img" />
+          <span>${escapeHtml(txt("footerCopy"))}</span>
+        </span>
+        <span>${escapeHtml(txt("contactAddrVal"))} · <a href="tel:+918307918448">+91 83079-18448 (Available for online payment)</a> · <a href="mailto:prime.tax.advisor01@gmail.com">prime.tax.advisor01@gmail.com</a></span>
       </div>
     </footer>
   `;
