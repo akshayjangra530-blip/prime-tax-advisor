@@ -139,7 +139,6 @@ function renderNavbar() {
     { href: "#intake-desk", label: txt("navIntake") },
     { href: "#documents", label: txt("navDocs") },
     { href: "#process", label: txt("navProcess") },
-    { href: "#portal", label: txt("navPortal") },
     { href: "#tools", label: txt("navTools") },
     { href: "#faq", label: txt("navFaq") },
     { href: "#contact", label: txt("navContact") }
@@ -209,7 +208,6 @@ function renderHeroSection() {
         <div class="hero-cta-row">
           <a href="#intake-desk" class="btn">${escapeHtml(txt("heroBtnPrimary"))}</a>
           <a href="#services" class="btn ghost">${escapeHtml(txt("heroBtnGhost"))}</a>
-          <a href="#portal" class="btn ghost">${escapeHtml(txt("heroBtnPortal"))}</a>
         </div>
         <div class="hero-stats rv">
           <div class="hero-stat-card">
@@ -585,20 +583,18 @@ function renderDocumentsSection() {
 
           <div class="card">
             <h3>${escapeHtml(txt("docsExistingTitle"))}</h3>
-            <p style="margin-bottom:1rem;">${escapeHtml(txt("docsExistingSub"))}</p>
-            <div class="fg" style="margin-bottom:0.9rem;">
-              <label class="fl" for="doc-case-sel">${escapeHtml(txt("docsSelectCase"))}</label>
-              <select id="doc-case-sel" class="fc" data-doc-filter="targetCaseId">
-                ${state.cases.map((c) => `<option value="${escapeHtml(c.id)}" ${c.id === f.targetCaseId ? "selected" : ""}>${escapeHtml(c.id)} — ${escapeHtml(c.name)} (${escapeHtml(loc(c.serviceName))})</option>`).join("")}
-              </select>
+            <p style="margin-bottom:1.15rem;">${escapeHtml(txt("docsExistingSub"))}</p>
+            <div class="docs-panel" style="margin-top:0; margin-bottom:1.15rem;">
+              <div class="docs-panel-head">
+                <h4>${escapeHtml(loc(svc.name))} · ${escapeHtml(loc(ent.name))}</h4>
+                <span class="badge badge-blue">${docs.length} ${escapeHtml(txt("docsRequiredBadge"))}</span>
+              </div>
+              <div class="hint">${escapeHtml(txt("contactPhoneLabel"))}: Aman Moyal · +91 83079-18448</div>
             </div>
-            <label class="dropzone" for="existing-case-upload">
-              <div style="font-weight:700; color:var(--a); font-size:0.88rem;">${escapeHtml(txt("docsExistingDropTitle"))}</div>
-              <div class="hint">${escapeHtml(txt("docsExistingDropHint"))}</div>
-              <input type="file" id="existing-case-upload" data-upload-existing-case="${escapeHtml(f.targetCaseId)}" multiple hidden />
-            </label>
-            <div style="margin-top:1rem;">
-              <button type="button" class="btn ghost sm" data-jump-service="${svc.id}">${escapeHtml(txt("docsUseInDesk"))}</button>
+            <div style="display:flex; flex-direction:column; gap:0.65rem;">
+              <button type="button" class="btn" data-jump-service="${svc.id}">${escapeHtml(txt("docsUseInDesk"))}</button>
+              <a href="https://wa.me/918307918448" target="_blank" rel="noopener" class="btn wa sm">${escapeHtml(txt("docsSendWaBtn"))}</a>
+              <a href="mailto:prime.tax.advisor01@gmail.com" class="btn ghost sm">${escapeHtml(txt("docsSendMailBtn"))}</a>
             </div>
           </div>
         </div>
@@ -627,127 +623,6 @@ function renderProcessSection() {
                 <p>${escapeHtml(loc(card.desc))}</p>
               </div>
             `).join("")}
-          </div>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function renderPortalSection() {
-  const q = state.portalSearch.trim().toLowerCase();
-  const filtered = state.cases.filter((c) => {
-    if (!q) return true;
-    return (
-      c.id.toLowerCase().includes(q) ||
-      c.name.toLowerCase().includes(q) ||
-      c.mobile.includes(q) ||
-      loc(c.serviceName).toLowerCase().includes(q)
-    );
-  });
-
-  const active = filtered.find((c) => c.id === state.selectedCaseId) || filtered[0] || null;
-
-  return `
-    <section class="sec alt" id="portal">
-      <div class="wrap">
-        <div class="sec-head rv">
-          <span class="eyebrow">${escapeHtml(txt("portalEyebrow"))}</span>
-          <h2>${escapeHtml(txt("portalTitle"))}</h2>
-          <p>${escapeHtml(txt("portalSub"))}</p>
-        </div>
-
-        <div class="portal-grid rv">
-          <aside class="card">
-            <div class="fg" style="margin-bottom:0.85rem;">
-              <label class="fl" for="portal-search-input">${escapeHtml(txt("portalSearchLabel"))}</label>
-              <input id="portal-search-input" class="fc" value="${escapeHtml(state.portalSearch)}" placeholder="${escapeHtml(txt("portalSearchPlaceholder"))}" />
-            </div>
-            <div class="case-list">
-              ${filtered.length ? filtered.map((c) => {
-                const badgeCls = c.stageIndex >= 6 ? "badge-emerald" : !c.docsComplete ? "badge-amber" : "badge-blue";
-                const stageLabel = loc(FLOW_STAGES[c.stageIndex] || FLOW_STAGES[0]);
-                return `
-                  <button type="button" class="case-item ${active && active.id === c.id ? "active" : ""}" data-select-case="${escapeHtml(c.id)}">
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
-                      <strong style="font-size:0.85rem;">${escapeHtml(c.id)}</strong>
-                      <span class="badge ${badgeCls}">${escapeHtml(stageLabel)}</span>
-                    </div>
-                    <div style="font-weight:700; font-size:0.88rem;">${escapeHtml(c.name)}</div>
-                    <div class="hint">${escapeHtml(loc(c.serviceName))} · ${escapeHtml(loc(c.entityName))}</div>
-                  </button>
-                `;
-              }).join("") : `<p class="hint">${escapeHtml(txt("portalNoMatch"))}</p>`}
-            </div>
-          </aside>
-
-          <div class="card">
-            ${active ? `
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.85rem; flex-wrap:wrap;">
-                <div>
-                  <div class="hint">ID: <strong>${escapeHtml(active.id)}</strong> · ${escapeHtml(active.createdAt)}</div>
-                  <h3 style="margin:0.2rem 0; font-size:1.15rem;">${escapeHtml(loc(active.serviceName))} — ${escapeHtml(loc(active.query))}</h3>
-                  <div style="font-size:0.86rem; color:var(--mut);">
-                    ${escapeHtml(active.name)} (${escapeHtml(loc(active.entityName))}) · PAN: ${escapeHtml(active.pan)}
-                  </div>
-                </div>
-                <span class="badge ${active.stageIndex >= 6 ? "badge-emerald" : "badge-blue"}">
-                  ${escapeHtml(txt("portalCurrentStage"))} ${escapeHtml(loc(FLOW_STAGES[active.stageIndex]))}
-                </span>
-              </div>
-
-              <div class="stage-stepper">
-                ${FLOW_STAGES.map((st, idx) => {
-                  const cls = idx < active.stageIndex ? "done" : idx === active.stageIndex ? "current" : "";
-                  return `<div class="stage-node ${cls}">${idx + 1}. ${escapeHtml(loc(st))}</div>`;
-                }).join("")}
-              </div>
-
-              <div class="docs-panel" style="margin-top:0;">
-                <strong>${escapeHtml(txt("portalConsultantNote"))}</strong>
-                <p style="margin:0.25rem 0 0; font-size:0.88rem;">${escapeHtml(loc(active.consultantNote))}</p>
-                ${active.departmentName ? `<div class="hint" style="margin-top:0.3rem;">${escapeHtml(active.departmentName)} · ${escapeHtml(active.noticeDueDate)}</div>` : ""}
-              </div>
-
-              ${!active.docsComplete ? `
-                <div class="notice-box">
-                  <h4 class="notice-box-title">⚠ ${escapeHtml(txt("portalMissingTitle"))}</h4>
-                  <div class="doc-tags" style="margin-bottom:0.8rem;">
-                    ${active.missingDocs.map((d) => `<span class="doc-tag">${escapeHtml(loc(d))}</span>`).join("")}
-                  </div>
-                  <label class="btn sm" style="cursor:pointer;">
-                    ${escapeHtml(txt("portalUploadMissingBtn"))}
-                    <input type="file" data-upload-existing-case="${escapeHtml(active.id)}" multiple hidden />
-                  </label>
-                </div>
-              ` : ""}
-
-              ${active.feeQuote && active.stageIndex >= 3 && active.stageIndex < 5 ? `
-                <div class="docs-panel" style="background:var(--surface-blue); border-color:rgba(15,76,129,0.3);">
-                  <h4 style="margin:0 0 0.3rem; font-family:var(--font-ui);">${escapeHtml(txt("portalQuoteTitle"))}</h4>
-                  <div style="font-weight:800; font-size:1rem; margin-bottom:0.7rem;">${escapeHtml(active.feeQuote)}</div>
-                  <div style="display:flex; gap:0.55rem; flex-wrap:wrap;">
-                    <button type="button" class="btn sm" data-case-action="approve:${escapeHtml(active.id)}">${escapeHtml(txt("portalApproveBtn"))}</button>
-                    <button type="button" class="btn ghost sm" data-case-action="followup:${escapeHtml(active.id)}">${escapeHtml(txt("portalFollowupBtn"))}</button>
-                  </div>
-                </div>
-              ` : ""}
-
-              <div style="margin-top:1rem;">
-                <strong style="font-size:0.88rem;">${escapeHtml(txt("portalUploadedTitle"))} (${active.uploadedFiles.length})</strong>
-                <div class="file-list">
-                  ${active.uploadedFiles.length ? active.uploadedFiles.map((f) => `
-                    <div class="file-row"><span>📄 ${escapeHtml(f.name)}</span><span class="hint">${escapeHtml(f.size)}</span></div>
-                  `).join("") : `<span class="hint">${escapeHtml(txt("portalNoFiles"))}</span>`}
-                </div>
-              </div>
-
-              <div style="margin-top:1rem; padding-top:0.85rem; border-top:1px solid var(--line); display:flex; gap:0.55rem; flex-wrap:wrap; align-items:center;">
-                <span class="hint" style="font-weight:700;">${escapeHtml(txt("portalDemoLabel"))}</span>
-                ${active.stageIndex < 3 ? `<button type="button" class="btn ghost sm" data-case-action="send-quote:${escapeHtml(active.id)}">${escapeHtml(txt("portalSendQuoteBtn"))}</button>` : ""}
-                ${active.stageIndex === 5 ? `<button type="button" class="btn sm" data-case-action="complete:${escapeHtml(active.id)}">${escapeHtml(txt("portalCompleteBtn"))}</button>` : ""}
-              </div>
-            ` : ""}
           </div>
         </div>
       </div>
@@ -835,7 +710,8 @@ function renderContactSection() {
               <div class="c-ico">📞</div>
               <div>
                 <strong>${escapeHtml(txt("contactPhoneLabel"))}</strong>
-                <div>
+                <div style="font-size:0.9rem; margin-top:0.1rem;">
+                  <span style="font-weight:600;">Aman Moyal:</span>
                   <a href="tel:+918307918448" style="color:var(--a); font-weight:700;">+91 83079-18448</a>
                   <span class="hint" style="font-weight:600;"> (Available for online payment)</span>
                 </div>
@@ -846,7 +722,7 @@ function renderContactSection() {
               <div>
                 <strong>${escapeHtml(txt("contactAnotherLabel"))}</strong>
                 <div style="display:grid; gap:0.2rem; margin-top:0.15rem; font-size:0.88rem;">
-                  <div><span style="font-weight:600;">Rahul Office:</span> <a href="tel:+919817419964" style="color:var(--a); font-weight:700;">+91 98174 19964</a></div>
+                  <div><span style="font-weight:600;">Rahul Goswami:</span> <a href="tel:+919817419964" style="color:var(--a); font-weight:700;">+91 98174 19964</a></div>
                   <div><span style="font-weight:600;">Yogesh Moyal:</span> <a href="tel:+917015249529" style="color:var(--a); font-weight:700;">+91 70152 49529</a></div>
                 </div>
               </div>
@@ -912,7 +788,7 @@ function renderContactSection() {
           <img src="logo-icon.png" alt="Prime Tax Advisor" class="footer-logo-img" />
           <span>${escapeHtml(txt("footerCopy"))}</span>
         </span>
-        <span>${escapeHtml(txt("contactAddrVal"))} · <a href="tel:+918307918448">+91 83079-18448 (Available for online payment)</a> · <a href="mailto:prime.tax.advisor01@gmail.com">prime.tax.advisor01@gmail.com</a></span>
+        <span>${escapeHtml(txt("contactAddrVal"))} · Aman Moyal: <a href="tel:+918307918448">+91 83079-18448 (Available for online payment)</a> · <a href="mailto:prime.tax.advisor01@gmail.com">prime.tax.advisor01@gmail.com</a></span>
       </div>
     </footer>
   `;
@@ -1025,7 +901,6 @@ function validateAndSubmitIntake() {
         <div><strong>${escapeHtml(txt("modalFilesLabel"))}</strong> ${newCase.uploadedFiles.length}</div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:0.65rem; margin-top:1.2rem;">
-        <button type="button" class="btn sm" data-jump-portal-case="${escapeHtml(caseId)}">${escapeHtml(txt("modalTrackBtn"))}</button>
         <a href="https://wa.me/918307918448?text=${waText}" target="_blank" rel="noopener" class="btn wa sm">${escapeHtml(txt("modalWaBtn"))}</a>
         <a href="mailto:prime.tax.advisor01@gmail.com?subject=${mailSubject}&body=${waText}" class="btn ghost sm">${escapeHtml(txt("modalMailBtn"))}</a>
       </div>
@@ -1165,7 +1040,6 @@ function renderAll() {
     renderIntakeDeskSection(),
     renderDocumentsSection(),
     renderProcessSection(),
-    renderPortalSection(),
     renderBandSection(),
     renderToolsSection(),
     renderFaqSection(),
@@ -1267,61 +1141,6 @@ document.addEventListener("click", (e) => {
     const [key, idx] = remBtn.getAttribute("data-remove-file").split(":");
     state.intake[key]?.splice(Number(idx), 1);
     renderAll();
-    return;
-  }
-
-  const caseSel = e.target.closest("[data-select-case]");
-  if (caseSel) {
-    state.selectedCaseId = caseSel.getAttribute("data-select-case");
-    renderAll();
-    return;
-  }
-
-  const jumpPortal = e.target.closest("[data-jump-portal-case]");
-  if (jumpPortal) {
-    state.selectedCaseId = jumpPortal.getAttribute("data-jump-portal-case");
-    closeModal();
-    renderAll();
-    document.getElementById("portal")?.scrollIntoView({ behavior: "smooth" });
-    return;
-  }
-
-  const actBtn = e.target.closest("[data-case-action]");
-  if (actBtn) {
-    const [action, caseId] = actBtn.getAttribute("data-case-action").split(":");
-    const c = state.cases.find((item) => item.id === caseId);
-    if (!c) return;
-
-    if (action === "send-quote") {
-      c.docsComplete = true;
-      c.missingDocs = [];
-      c.stageIndex = 3;
-      c.feeQuote = "₹4,500 (Consultation, Filing & Representation)";
-      c.consultantNote = {
-        hi: "डॉक्यूमेंट रिव्यू पूरा हो गया है और फीस कोट भेज दिया गया है। कृपया आगे बढ़ने के लिए सहमति दें।",
-        en: "Document review complete and fee quote issued. Please approve to proceed."
-      };
-    } else if (action === "approve") {
-      c.stageIndex = 5;
-      c.consultantNote = {
-        hi: "क्लाइंट सहमति व पेमेंट प्राप्त हो गया है। फाइलिंग कार्य शुरू कर दिया गया है।",
-        en: "Client approval & payment received. Work has commenced."
-      };
-    } else if (action === "followup") {
-      c.consultantNote = {
-        hi: "फॉलो-अप कॉल अनुरोध दर्ज हुआ है। कंसल्टेंट शीघ्र संपर्क करेंगे।",
-        en: "Follow-up call requested. Our consultant will reach out shortly."
-      };
-    } else if (action === "complete") {
-      c.stageIndex = 6;
-      c.consultantNote = {
-        hi: "काम पूरा हो चुका है और फाइनल डॉक्यूमेंट आपके ईमेल व WhatsApp पर भेज दिए गए हैं।",
-        en: "Work completed and final deliverables sent to your email & WhatsApp."
-      };
-    }
-    saveCases(state.cases);
-    showToast(state.lang === "hi" ? "केस स्टेटस अपडेट हुआ।" : "Case status updated.", "success");
-    renderAll();
   }
 });
 
@@ -1333,15 +1152,6 @@ document.addEventListener("input", (e) => {
   }
   if (e.target.id === "wa-q-name") state.waQuickName = e.target.value;
   if (e.target.id === "wa-q-help") state.waQuickHelp = e.target.value;
-  if (e.target.id === "portal-search-input") {
-    state.portalSearch = e.target.value;
-    renderAll();
-    const inp = document.getElementById("portal-search-input");
-    if (inp) {
-      inp.focus();
-      inp.setSelectionRange(inp.value.length, inp.value.length);
-    }
-  }
 });
 
 document.addEventListener("change", (e) => {
@@ -1363,25 +1173,6 @@ document.addEventListener("change", (e) => {
     state.intake[upTarget].push(...added);
     showToast(state.lang === "hi" ? `${added.length} डॉक्यूमेंट संलग्न हुए।` : `${added.length} file(s) attached.`, "success");
     renderAll();
-    return;
-  }
-  const existingCaseId = e.target.getAttribute("data-upload-existing-case");
-  if (existingCaseId && e.target.files?.length) {
-    const c = state.cases.find((item) => item.id === existingCaseId);
-    if (c) {
-      const added = Array.from(e.target.files).map((f) => ({ name: f.name, size: formatFileSize(f.size) }));
-      c.uploadedFiles.push(...added);
-      c.docsComplete = true;
-      c.missingDocs = [];
-      c.stageIndex = Math.max(c.stageIndex, 2);
-      c.consultantNote = {
-        hi: `${added.length} नए डॉक्यूमेंट प्राप्त हुए हैं। कंसल्टेंट द्वारा पुनः समीक्षा की जा रही है।`,
-        en: `${added.length} new document(s) uploaded. Under consultant re-review.`
-      };
-      saveCases(state.cases);
-      showToast(state.lang === "hi" ? `केस ${c.id} में डॉक्यूमेंट अपलोड हुए।` : `Documents uploaded to ${c.id}.`, "success");
-      renderAll();
-    }
   }
 });
 
